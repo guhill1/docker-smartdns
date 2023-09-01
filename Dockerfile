@@ -15,7 +15,7 @@ FROM alpine
 COPY --from=builder /smartdns/usr/sbin/smartdns /bin/smartdns
 
 ADD start.sh /start.sh
-ADD config.conf /config.conf
+ADD smartdns.conf /smartdns.conf
 
 RUN chmod +x /bin/smartdns \
     && chmod +x /start.sh
