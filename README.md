@@ -3,7 +3,7 @@
 smartdns,
 https://github.com/pymumu/smartdns
 
-compile
+编译
 ```
 sudo docker build . -f Dockerfile -t smartdns --no-cache
 ```
@@ -20,3 +20,6 @@ docker run -d \
   --name=smartdns \
   smartdns
 ```
+release使用方法
+```
+docker import snartdns.tar smartdns
