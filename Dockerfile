@@ -13,10 +13,12 @@ RUN export URL=https://api.github.com/repos/pymumu/smartdns/releases/latest \
 FROM alpine
 
 COPY --from=builder /smartdns/usr/sbin/smartdns /bin/smartdns
-RUN chmod +x /bin/smartdns
 
 ADD start.sh /start.sh
-ADD smartdns.conf /smartdns.conf
+ADD config.conf /config.conf
+
+RUN chmod +x /bin/smartdns \
+    && chmod +x /start.sh
 
 WORKDIR /
 
