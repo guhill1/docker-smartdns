@@ -3,7 +3,7 @@
 smartdns,
 https://github.com/pymumu/smartdns
 
-编译
+編譯
 ```
 sudo docker build . -f Dockerfile -t smartdns --no-cache
 ```
