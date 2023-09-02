@@ -26,4 +26,4 @@ VOLUME ["/smartdns"]
 
 EXPOSE 53
 
-CMD ["sh","/start.sh"]
+CMD ["/start.sh"]
