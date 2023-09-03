@@ -10,7 +10,7 @@ on:
     - cron: '40 7 */5 * *'
   push:
     branches: [ "main" ]
-    # Publish semver tags as releases.
+    # Publish server tags as releases.
     tags: [ 'v*.*.*' ]
   pull_request:
     branches: [ "main" ]
