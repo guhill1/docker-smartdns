@@ -9,7 +9,7 @@ https://github.com/pymumu/smartdns
 <PRE>
 docker stop smartdns && docker rm smartdns
   
-docker run -d \\<br>
+docker run -d \
   -p 6053:6053/udp \
   -p 7053:7053/udp \
   -p 6053:6053/tcp \
