@@ -9,7 +9,7 @@ on:
   schedule:
     - cron: '40 7 */5 * *'
   push:
-    branches: [ "" ]
+    branches: [ "main" ]
     # Publish server tags as releases.
     tags: [ 'v*.*.*' ]
   pull_request:
