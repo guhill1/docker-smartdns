@@ -7,6 +7,8 @@ https://github.com/pymumu/smartdns
 安裝
 ```
 docker stop smartdns && docker rm smartdns
+<br>
+<br>
 docker run -d \\<br>
   -p 6053:6053/udp \\<br>
   -p 7053:7053/udp \\<br>
