@@ -3,11 +3,8 @@
 smartdns,
 https://github.com/pymumu/smartdns
 
-編譯
 ```
-sudo docker build . -f Dockerfile -t smartdns --no-cache
-```
-install
+安裝
 ```
 docker stop smartdns && docker rm smartdns
 docker run -d \
@@ -18,7 +15,7 @@ docker run -d \
   -v /docker/smartdns/:/etc/smartdns/ \
   --restart=always \
   --name=smartdns \
-  smartdns
+  ghcr.io/guhill1/docker-smartdns
 ```
 release使用方法
 ```
