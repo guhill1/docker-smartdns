@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - master
+  schedule:
+     - cron:  '0 1 */7 * *'    # At every 7days
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
