@@ -6,7 +6,7 @@ https://github.com/pymumu/smartdns
 ```
 安裝
 ```
-<PRE>
+```
 docker stop smartdns && docker rm smartdns
   
 docker run -d \
@@ -18,7 +18,7 @@ docker run -d \
   --restart=always \
   --name=smartdns \
   ghcr.io/guhill1/docker-smartdns
-</PRE>
+```
 ```
 release使用方法
 ```
