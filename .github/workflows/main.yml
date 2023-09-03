@@ -1,4 +1,4 @@
-name: Docker
+name: build and push 1
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -7,13 +7,13 @@ name: Docker
 
 on:
   schedule:
-    - cron: '40 7 * * *'
+    - cron: '40 7 */5 * *'
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 env:
   # Use docker.io for Docker Hub if empty
