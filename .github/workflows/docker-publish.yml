@@ -2,7 +2,7 @@ name: push Docker image to ghcr.io
 on:
   push:
     branches:
-      - master
+      - main
   schedule:
      - cron:  '0 1 */7 * *'    # At every 7days
 jobs:
