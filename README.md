@@ -8,16 +8,15 @@ https://github.com/pymumu/smartdns
 ```
 <PRE>
 docker stop smartdns && docker rm smartdns
-<br>
-<br>
+  
 docker run -d \\<br>
-  -p 6053:6053/udp \\<br>
-  -p 7053:7053/udp \\<br>
-  -p 6053:6053/tcp \\<br>
-  -p 7053:7053/tcp \\<br>
-  -v /docker/smartdns/:/etc/smartdns/ \\<br>
-  --restart=always \\<br>
-  --name=smartdns \\<br>
+  -p 6053:6053/udp \
+  -p 7053:7053/udp \
+  -p 6053:6053/tcp \
+  -p 7053:7053/tcp \
+  -v /docker/smartdns/:/etc/smartdns/ \
+  --restart=always \
+  --name=smartdns \
   ghcr.io/guhill1/docker-smartdns
 </PRE>
 ```
