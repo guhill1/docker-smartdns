@@ -1,7 +1,6 @@
 name: push Docker image to ghcr.io
 on:
-  #repository_dispatch:
-  #workflow_dispatch:
+  workflow_dispatch:
   push:
     branches:
       - main
