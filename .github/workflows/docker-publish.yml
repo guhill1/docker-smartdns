@@ -1,11 +1,11 @@
 name: push Docker image to ghcr.io
 on:
   repository_dispatch:
+  schedule:
+     - cron:  '0 1 */7 * *'    # At every 7days
   push:
     branches:
       - main
-  schedule:
-     - cron:  '0 1 */7 * *'    # At every 7days
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
