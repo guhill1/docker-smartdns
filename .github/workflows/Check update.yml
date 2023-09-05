@@ -2,7 +2,7 @@
 name: Check update
 
 env:
-  REPO_URL: https://github.com/guhill1/docker-smartdns
+  REPO_URL: https://github.com/pymumu/smartdns
   REPO_BRANCH: main
 
 on:
