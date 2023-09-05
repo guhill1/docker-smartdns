@@ -3,7 +3,7 @@ name: Check update
 
 env:
   REPO_URL: https://github.com/pymumu/smartdns
-  REPO_BRANCH: main
+  REPO_BRANCH: master
 
 on:
   workflow_dispatch:
