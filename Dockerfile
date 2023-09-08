@@ -1,3 +1,6 @@
+FROM debian:bookworm-slim AS builder
+LABEL first stage
+
 # prepare builder
 ARG OPENSSL_VER=3.0.10
 RUN apt update && \
@@ -20,8 +23,8 @@ RUN apt update && \
     cd / && rm -rf /build
 
 # do make
-COPY . /build/smartdns/
-RUN cd /build/smartdns && \
+RUN git clone https://github.com/pymumu/smartdns && \
+    cd /smartdns && \
     export CC=musl-gcc && \
     export CFLAGS="-I /opt/build/include" && \
     export LDFLAGS="-L /opt/build/lib -L /opt/build/lib64" && \
@@ -33,8 +36,20 @@ RUN cd /build/smartdns && \
     cp package/smartdns/etc /release/ -a && \
     cp package/smartdns/usr /release/ -a && \
     cd / && rm -rf /build
+    
+FROM alpine
+COPY --from=builder /smartdns/usr/sbin/smartdns /bin/smartdns
 
-FROM busybox:stable-musl
-COPY --from=smartdns-builder /release/ /
-EXPOSE 53/udp
-VOLUME ["/etc/smartdns/"]
+ADD start.sh /start.sh
+ADD smartdns.conf /smartdns.conf
+
+RUN chmod +x /bin/smartdns \
+    && chmod +x /start.sh
+
+WORKDIR /
+
+VOLUME ["/smartdns"]
+
+EXPOSE 53
+
+CMD ["/start.sh"]
