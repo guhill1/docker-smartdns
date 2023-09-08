@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim AS builder
+FROM ubuntu:latest AS builder
 LABEL first stage
 
 # prepare builder
