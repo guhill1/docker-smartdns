@@ -43,7 +43,7 @@ COPY --from=builder /release/ /
 ADD start.sh /start.sh
 ADD smartdns.conf /smartdns.conf
 
-RUN chmod +x /bin/smartdns \
+RUN chmod +x /usr/sbin/smartdns \
     && chmod +x /start.sh
 
 WORKDIR /
