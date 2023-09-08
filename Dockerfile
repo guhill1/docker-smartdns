@@ -23,8 +23,8 @@ RUN apt update && \
     cd / && rm -rf /build
 
 # do make
-RUN git clone https://github.com/pymumu/smartdns /smartdns
-RUN cd /smartdns && \
+RUN git clone https://github.com/pymumu/smartdns /smartdns && \
+    cd /smartdns && \
     export CC=musl-gcc && \
     export CFLAGS="-I /opt/build/include" && \
     export LDFLAGS="-L /opt/build/lib -L /opt/build/lib64" && \
