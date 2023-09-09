@@ -2,9 +2,9 @@ FROM ubuntu:latest AS builder
 LABEL first stage
 
 # prepare builder
-RUN apt update && \
+RUN sudo apt update -y && \
     sudo apt upgrade -y && \
-    apt install perl curl make musl-tools musl-dev git openssl
+    sudo apt install perl curl make musl-tools musl-dev git openssl
     
 # do make
 RUN git clone https://github.com/pymumu/smartdns /smartdns && \
