@@ -35,6 +35,7 @@ RUN git clone https://github.com/pymumu/smartdns /smartdns && \
     mkdir -p /release/var/log /release/run && \
     cp package/smartdns/etc /release/ -a && \
     cp package/smartdns/usr /release/ -a && \
+    rm  /release/etc/smartdns/smartdns.conf && \
     cd / && rm -rf /smartdns
     
 FROM alpine
