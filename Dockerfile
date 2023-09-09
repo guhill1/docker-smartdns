@@ -2,26 +2,10 @@ FROM ubuntu:latest AS builder
 LABEL first stage
 
 # prepare builder
-ARG OPENSSL_VER=3.0.10
 RUN apt update && \
-    apt install -y perl curl make musl-tools musl-dev git && \
-    ln -s /usr/include/linux /usr/include/$(uname -m)-linux-musl && \
-    ln -s /usr/include/asm-generic /usr/include/$(uname -m)-linux-musl && \
-    ln -s /usr/include/$(uname -m)-linux-gnu/asm /usr/include/$(uname -m)-linux-musl && \
-    \
-    mkdir -p /build/openssl && \
-    cd /build/openssl && \
-    curl -sSL http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/openssl_${OPENSSL_VER}.orig.tar.gz | tar --strip-components=1 -zxv && \
-    \
-    export CC=musl-gcc && \
-    if [ "$(uname -m)" = "aarch64" ]; then \
-        ./config --prefix=/opt/build no-tests -mno-outline-atomics ; \
-    else \ 
-        ./config --prefix=/opt/build no-tests ; \
-    fi && \
-    make all -j8 && make install_sw && \
-    cd / && rm -rf /build
-
+    sudo apt upgrade -y && \
+    apt install perl curl make musl-tools musl-dev git openssl
+    
 # do make
 RUN git clone https://github.com/pymumu/smartdns /smartdns && \
     cd /smartdns && \
