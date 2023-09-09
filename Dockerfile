@@ -41,15 +41,14 @@ RUN git clone https://github.com/pymumu/smartdns /smartdns && \
 FROM alpine
 COPY --from=builder /release/ /
 
+WORKDIR /
 ADD start.sh /start.sh
 ADD smartdns.conf /smartdns.conf
 
 RUN chmod +x /usr/sbin/smartdns \
     && chmod +x /start.sh
 
-WORKDIR /
-
-VOLUME ["/smartdns"]
+VOLUME ["/etc/smartdns"]
 
 EXPOSE 53
 
