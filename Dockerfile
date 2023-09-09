@@ -7,7 +7,7 @@ RUN apt update -y && \
     apt install perl curl make musl-tools musl-dev git openssl -y
     
 # do make
-
+WORKDIR /
 RUN git clone https://github.com/pymumu/smartdns /smartdns
 
 WORKDIR /smartdns/
