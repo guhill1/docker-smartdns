@@ -43,10 +43,12 @@ jobs:
         token: ${{ secrets.ACTIONS_TRIGGER_PAT }}
         event-type: source update and push
     - name: Delete workflow runs
-      uses: guhill1/delete-workflow-runs@main
+      uses: Mattraks/delete-workflow-runs@v2
       with:
-        retain_days: 1
-        keep_minimum_runs: 1
+        token: ${{ github.token }}
+        repository: ${{ github.repository }}
+        retain_days: 30
+        keep_minimum_runs: 6
         
     - name: keepalive-workflow
       uses: gautamkrishnar/keepalive-workflow@v1 # using the workflow with default settings
