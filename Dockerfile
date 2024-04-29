@@ -2,7 +2,7 @@ FROM ubuntu:latest AS builder
 LABEL first stage
 
 # prepare builder
-ARG OPENSSL_VER=3.0.10
+ARG OPENSSL_VER=3.0.13
 RUN apt update && \
     apt install -y perl curl make musl-tools musl-dev git libgtest-dev dnsperf && \
     ln -s /usr/include/linux /usr/include/$(uname -m)-linux-musl && \
