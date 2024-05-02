@@ -4,7 +4,7 @@ LABEL first stage
 # prepare builder
 ARG OPENSSL_VER=3.0.10
 RUN apt update && \
-    apt install -y perl curl make musl-tools musl-dev git libssl-dev && \
+    apt install -y perl curl make musl-tools musl-dev git libssl-dev binutils && \
     ln -s /usr/include/linux /usr/include/$(uname -m)-linux-musl && \
     ln -s /usr/include/asm-generic /usr/include/$(uname -m)-linux-musl && \
     ln -s /usr/include/$(uname -m)-linux-gnu/asm /usr/include/$(uname -m)-linux-musl && \
