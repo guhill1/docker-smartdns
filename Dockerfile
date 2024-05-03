@@ -6,9 +6,9 @@ LABEL first stage
 # prepare builder
 RUN apt update && \
     apt install -y make gcc libssl-dev git && \
-    git clone https://github.com/pymumu/smartdns /smartdns && \
-    cd /smartdns
-RUN LDFLAGS="-L/root/x64/lib" CFLAGS="-I/root/x64/include" bash package/build-pkg.sh --platform linux --arch x86_64 --static && \
+    git clone https://github.com/pymumu/smartdns /smartdns
+RUN cd /smartdns && \
+    LDFLAGS="-L/root/x64/lib" CFLAGS="-I/root/x64/include" bash package/build-pkg.sh --platform linux --arch x86_64 --static && \
     mkdir -p /release/var/log /release/run && \
     strip package/smartdns/usr/smartdns
 RUN cp package/smartdns/etc /release/ -a && \
