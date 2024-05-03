@@ -5,7 +5,7 @@ LABEL first stage
 # new compile routine	
 # prepare builder
 RUN apt update && \
-    apt install -y make gcc libssl-dev && \
+    apt install -y make gcc libssl-dev git && \
     git clone https://github.com/pymumu/smartdns /smartdns && \
     cd /smartdns && \
     LDFLAGS="-L/root/x64/lib" CFLAGS="-I/root/x64/include" bash package/build-pkg.sh --platform linux --arch x86_64 --static && \
