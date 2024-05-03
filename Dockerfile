@@ -7,14 +7,14 @@ LABEL first stage
 RUN apt update && \
     apt install -y make gcc libssl-dev && \
     git clone https://github.com/pymumu/smartdns /smartdns && \
-    cd /smartdns && \
-    LDFLAGS="-L/root/x64/lib" CFLAGS="-I/root/x64/include" bash package/build-pkg.sh --platform linux --arch x86_64 --static && \
-    mkdir -p /release/var/log /release/run && \
-    strip package/smartdns/usr/smartdns && \
-    cp package/smartdns/etc /release/ -a && \
-    cp package/smartdns/usr /release/ -a && \
-    rm  /release/etc/smartdns/smartdns.conf && \
-    cd / && rm -rf /smartdns
+    cd /smartdns
+    #LDFLAGS="-L/root/x64/lib" CFLAGS="-I/root/x64/include" bash package/build-pkg.sh --platform linux --arch x86_64 --static && \
+    #mkdir -p /release/var/log /release/run && \
+    #strip package/smartdns/usr/smartdns && \
+    #cp package/smartdns/etc /release/ -a && \
+    #cp package/smartdns/usr /release/ -a && \
+    #rm  /release/etc/smartdns/smartdns.conf && \
+    #cd / && rm -rf /smartdns
     
 FROM alpine
 COPY --from=builder /release/ /
