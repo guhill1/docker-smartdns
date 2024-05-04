@@ -39,9 +39,4 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ghcr.io/guhill1/docker-smartdns
           
-      - name: Generate artifact attestation
-        uses: github-early-access/generate-build-provenance@main
-        with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-path: 'docker-smartdns'
 
