@@ -22,8 +22,8 @@ RUN apt install -y libssl-dev git && \
 RUN cd /smartdns && \
     bash package/build-pkg.sh --platform linux --arch x86_64 --static && \
     mkdir -p /release/var/log /release/run && \
-    strip src/smartdns
-RUN cp etc/smartdns /release/etc/smartdns -a && \
+    strip src/smartdns && \
+    cp etc/smartdns /release/etc/smartdns -a && \
     cp src/smartdns /release/usr/sbin/ -a && \
     rm  /release/etc/smartdns/smartdns.conf && \
     cd / && rm -rf /smartdns
