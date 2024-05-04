@@ -10,8 +10,7 @@ jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      pages: write
+      actions: write
       id-token: write
       
     steps:
