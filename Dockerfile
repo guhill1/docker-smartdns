@@ -8,6 +8,7 @@ RUN apt update && \
     apt install build-essential wget -y
 ARG openssl_version=3.0.13
 RUN wget "https://www.openssl.org/source/openssl-$openssl_version.tar.gz"
+RUN tar xf "openssl-$openssl_version.tar.gz"
 RUN cd openssl-$openssl_version
 ARG LIB_dir=~/x64 
 RUN ./config --prefix=$LIB_dir && \
