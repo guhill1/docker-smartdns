@@ -25,7 +25,7 @@ RUN cd /smartdns && \
     strip src/smartdns && \
     mkdir -p /release/etc/smartdns/ && \
     mkdir -p /release/usr/sbin/ && \
-    cp etc/smartdns /release/etc/smartdns/ -a && \
+    cp -r etc/smartdns/ /release/etc/smartdns/ -a && \
     cp src/smartdns /release/usr/sbin/ -a && \
     rm  /release/etc/smartdns/smartdns.conf && \
     cd / && rm -rf /smartdns
