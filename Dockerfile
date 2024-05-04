@@ -20,9 +20,6 @@ RUN apt update && \
 #=======================================================================================================    
 #compile smartdns
 
-ARG LDFLAGS="-L/root/x64/lib"
-ARG CFLAGS="-I/root/x64/include"
-
 RUN apt install -y libssl-dev git && \
     git clone https://github.com/pymumu/smartdns /smartdns && \
     cd /smartdns && \
