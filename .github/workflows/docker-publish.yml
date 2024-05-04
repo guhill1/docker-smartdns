@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
+      packages: write
       contents: read
       attestations: write
       
@@ -41,6 +42,6 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
-          subject-path: '${{ github.workspace }}/docker-smartdns'
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
