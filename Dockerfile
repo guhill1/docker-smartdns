@@ -10,9 +10,9 @@ ARG openssl_version=3.0.13
 RUN wget "https://www.openssl.org/source/openssl-$openssl_version.tar.gz"
 RUN tar xf "openssl-$openssl_version.tar.gz"
 RUN cd openssl-$openssl_version
-ARG LIB_dir=~/x64 
-RUN ./config --prefix=$LIB_dir && \
-    make build_libs -j $(grep "cpu cores" /proc/cpuinfo | wc -l) && \
+#ARG LIB_dir=~/x64 
+RUN ./config
+RUN make build_libs -j $(grep "cpu cores" /proc/cpuinfo | wc -l) && \
     make install_dev
 RUN cd .. && \
     rm -rf "openssl-$openssl_version" "openssl-$openssl_version.tar.gz"    
