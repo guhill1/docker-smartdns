@@ -42,6 +42,6 @@ jobs:
         uses: actions/attest-build-provenance@v1
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+          load: true
           subject-digest: ${{ steps.push.outputs.digest }}
-          subject-path: '${{ github.workspace }}/docker-smartdns'
           push-to-registry: true
