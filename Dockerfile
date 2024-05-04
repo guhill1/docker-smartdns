@@ -20,7 +20,7 @@ RUN apt update && \
 #=======================================================================================================    
 #compile smartdns
 
-RUN apt install -y libssl-dev git && \
+RUN apt install -y git && \
     git clone https://github.com/pymumu/smartdns /smartdns && \
     cd /smartdns && \
     bash package/build-pkg.sh --platform linux --arch x86_64 --static && \
