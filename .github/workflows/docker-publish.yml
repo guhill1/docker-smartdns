@@ -43,5 +43,5 @@ jobs:
         uses: github-early-access/generate-build-provenance@main
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-path: '/docker-smartdns'
+          subject-path: 'docker-smartdns'
 
