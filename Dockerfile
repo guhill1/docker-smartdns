@@ -24,8 +24,8 @@ RUN apt install -y libssl-dev git && \
     git clone https://github.com/pymumu/smartdns /smartdns && \
     cd /smartdns && \
     bash package/build-pkg.sh --platform linux --arch x86_64 --static && \
-    mkdir -p /release/var/log /release/run && \
     strip src/smartdns && \
+    mkdir -p /release/var/log /release/run && \
     mkdir -p /release/etc/smartdns/ && \
     mkdir -p /release/usr/sbin/ && \
     cp etc/smartdns/*.* /release/etc/smartdns/ -a && \
