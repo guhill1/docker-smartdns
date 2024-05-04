@@ -40,6 +40,6 @@ jobs:
           tags: ghcr.io/guhill1/docker-smartdns
           
       - name: Upload image
-        uses: ishworkh/docker-image-artifact-upload@v2.0.1
+        uses: ishworkh/docker-image-artifact-upload@v2.1.0
         with:
           image: "ghcr.io/guhill1/docker-smartdns"
