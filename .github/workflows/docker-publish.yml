@@ -44,4 +44,4 @@ jobs:
         if: true
         with:
           name: Docker_smartdns${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-          path: /release
+          path: /smartdns
