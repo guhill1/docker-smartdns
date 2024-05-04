@@ -39,4 +39,9 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ghcr.io/guhill1/docker-smartdns
           
-
+      - name: Upload firmware directory
+        uses: actions/upload-artifact@main
+        if: true
+        with:
+          name: Docker_smartdns${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          path: /usr/sbin/smartdns
