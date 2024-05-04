@@ -50,5 +50,12 @@ jobs:
         retain_days: 30
         keep_minimum_runs: 6
         
-    - name: keepalive-workflow
-      uses: gautamkrishnar/keepalive-workflow@v1 # using the workflow with default settings
+  keepalive-job:
+    name: Keepalive Workflow
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gautamkrishnar/keepalive-workflow@v2
+      
