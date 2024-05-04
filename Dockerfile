@@ -1,25 +1,31 @@
-FROM ubuntu:22.04 AS builder
+FROM ubuntu:latest AS builder
 LABEL first stage
 
-#======================================================================================================================================
-# new compile routine	
-# prepare builder
-RUN apt update && \
-    apt install build-essential wget -y
+#===========================================================================================================
+# new compile routine
+# compile openssl
 ARG openssl_version=3.0.13
-RUN wget "https://www.openssl.org/source/openssl-$openssl_version.tar.gz"
-RUN tar xf "openssl-$openssl_version.tar.gz"
-RUN cd openssl-$openssl_version && \
+
+RUN apt update && \
+    apt install build-essential wget -y && \
+    wget "https://www.openssl.org/source/openssl-$openssl_version.tar.gz" && \
+    tar xf "openssl-$openssl_version.tar.gz" && \
+    cd openssl-$openssl_version && \
     ./config && \
     make build_libs -j $(grep "cpu cores" /proc/cpuinfo | wc -l) && \
-    make install_dev
-RUN cd .. && \
-    rm -rf "openssl-$openssl_version" "openssl-$openssl_version.tar.gz"    
+    make install_dev  && \
+    cd .. && \
+    rm -rf "openssl-$openssl_version" "openssl-$openssl_version.tar.gz"
+    
+#=======================================================================================================    
+#compile smartdns
+
 ARG LDFLAGS="-L/root/x64/lib"
-ARG CFLAGS="-I/root/x64/include"    
+ARG CFLAGS="-I/root/x64/include"
+
 RUN apt install -y libssl-dev git && \
-    git clone https://github.com/pymumu/smartdns /smartdns
-RUN cd /smartdns && \
+    git clone https://github.com/pymumu/smartdns /smartdns && \
+    cd /smartdns && \
     bash package/build-pkg.sh --platform linux --arch x86_64 --static && \
     mkdir -p /release/var/log /release/run && \
     strip src/smartdns && \
@@ -41,7 +47,5 @@ RUN chmod +x /usr/sbin/smartdns \
     && chmod +x /start.sh
 
 VOLUME ["/etc/smartdns"]
-
-EXPOSE 53
 
 CMD ["/start.sh"]
