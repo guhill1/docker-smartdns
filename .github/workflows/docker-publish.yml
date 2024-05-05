@@ -45,11 +45,19 @@ jobs:
         run: docker build --tag "${IMAGE_TAG}" .
 
       - name: Save Docker image
-        run: docker save --output image.tar "${IMAGE_TAG}"
+        run: docker save --output docker-smartdns.tar "${IMAGE_TAG}"
         
       - name: Upload Docker image
         uses: actions/upload-artifact@v4
         with:
           name: docker-smartdns
-          path: image.tar
-          retention-days: 1
+          path: docker-smartdns.tar
+          retention-days: 3
+          
+      - name: Release with Notes
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            docker-smartdns.tar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
