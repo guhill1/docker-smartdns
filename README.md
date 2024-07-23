@@ -1,5 +1,5 @@
 # smartdns docker
-Automatically generate docker of smartdns.
+Automatically generate docker image of smartdns.
 
 smartdns,
 https://github.com/pymumu/smartdns
