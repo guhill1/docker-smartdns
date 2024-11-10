@@ -33,7 +33,7 @@ RUN apt install -y git && \
     rm  /release/etc/smartdns/smartdns.conf && \
     cd / && rm -rf /smartdns
     
-FROM alpine
+FROM alpine:latest
 COPY --from=builder /release/ /
 
 WORKDIR /
