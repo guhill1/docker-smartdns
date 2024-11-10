@@ -5,6 +5,8 @@ Build docker image for smartdns.
 smartdns,
 https://github.com/pymumu/smartdns
 
+加入分流支持,已整合ipset,自動生成cnset ip集
+
 安裝
 <pre>
 docker stop smartdns && docker rm smartdns
