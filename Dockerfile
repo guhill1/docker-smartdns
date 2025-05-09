@@ -4,6 +4,7 @@
 FROM ubuntu:latest AS quic-builder
 ARG DEBIAN_FRONTEND=noninteractive
 
+# Install necessary dependencies
 RUN apt update && \
     apt install -y \
         build-essential \
@@ -23,9 +24,10 @@ RUN apt update && \
         cmake \
         ninja-build \
         python3 \
-        wget
+        curl && \
+    apt clean
 
-# Build nghttp3
+# Clone and build nghttp3
 RUN git clone --depth=1 https://github.com/ngtcp2/nghttp3 && \
     cd nghttp3 && \
     autoreconf -i && \
@@ -33,7 +35,7 @@ RUN git clone --depth=1 https://github.com/ngtcp2/nghttp3 && \
     make -j$(nproc) && \
     make install
 
-# Build ngtcp2
+# Clone and build ngtcp2
 RUN git clone --depth=1 https://github.com/ngtcp2/ngtcp2 && \
     cd ngtcp2 && \
     autoreconf -i && \
@@ -42,6 +44,7 @@ RUN git clone --depth=1 https://github.com/ngtcp2/ngtcp2 && \
         --with-libnghttp3=/usr && \
     make -j$(nproc) && \
     make install
+
 
 #===============================
 # Stage 2: Build SmartDNS with QUIC support
