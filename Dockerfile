@@ -1,66 +1,54 @@
 # Build stage
-FROM ubuntu:latest AS builder
-LABEL first stage
+FROM ubuntu:22.04 AS builder
 
-#===========================================================================================================
-# Install build dependencies and OpenSSL
+LABEL stage=builder
+
+ARG DEBIAN_FRONTEND=noninteractive
 ARG openssl_version=3.0.13
 
+# 安装依赖（尽量精简，仅用于构建 QUIC 支持）
 RUN apt update && \
-    apt install build-essential wget git curl pkg-config libssl-dev libnghttp2-dev -y && \
-    wget "https://www.openssl.org/source/openssl-$openssl_version.tar.gz" && \
-    tar xf "openssl-$openssl_version.tar.gz" && \
-    cd openssl-$openssl_version && \
-    ./config && \
-    make build_libs -j $(grep "cpu cores" /proc/cpuinfo | wc -l) && \
-    make install_dev  && \
-    cd .. && \
-    rm -rf "openssl-$openssl_version" "openssl-$openssl_version.tar.gz"
+    apt install -y build-essential git wget curl ca-certificates pkg-config libtool autoconf automake \
+                   libev-dev libevent-dev libjemalloc-dev zlib1g-dev cmake ninja-build \
+                   libssl-dev && \
+    apt clean
 
-#===========================================================================================================
-# Install gRPC and QUIC related dependencies
-RUN apt install -y cmake libprotobuf-dev protobuf-compiler \
-    && git clone https://github.com/grpc/grpc.git /grpc && \
-    cd /grpc && \
-    git submodule update --init --recursive && \
-    make && make install && \
-    cd / && rm -rf /grpc
+# 构建 nghttp3 和 ngtcp2（QUIC 所需） - 会略花时间
+RUN git clone --depth=1 https://github.com/ngtcp2/nghttp3 && \
+    cd nghttp3 && \
+    autoreconf -i && \
+    ./configure --prefix=/usr && make -j$(nproc) && make install && \
+    cd .. && rm -rf nghttp3
 
-RUN apt install -y libnghttp3-dev
+RUN git clone --depth=1 https://github.com/ngtcp2/ngtcp2 && \
+    cd ngtcp2 && \
+    autoreconf -i && \
+    ./configure --prefix=/usr --with-openssl && make -j$(nproc) && make install && \
+    cd .. && rm -rf ngtcp2
 
-#===========================================================================================================
-# Compile SmartDNS
-RUN git clone https://github.com/pymumu/smartdns /smartdns && \
+# 编译 SmartDNS
+RUN git clone --depth=1 https://github.com/pymumu/smartdns /smartdns && \
     cd /smartdns && \
-    # 使用 --enable-quic 标志启用 QUIC（DoQ）
     bash package/build-pkg.sh --platform linux --arch x86_64 --static --enable-quic && \
     strip src/smartdns && \
-    mkdir -p /release/var/log /release/run && \
-    mkdir -p /release/etc/smartdns/ && \
-    mkdir -p /release/usr/sbin/ && \
-    cp etc/smartdns/*.* /release/etc/smartdns/ -a && \
-    cp src/smartdns /release/usr/sbin/ -a && \
-    rm  /release/etc/smartdns/smartdns.conf && \
-    cd / && rm -rf /smartdns
+    mkdir -p /release/usr/sbin && \
+    cp src/smartdns /release/usr/sbin/ && \
+    mkdir -p /release/etc/smartdns && \
+    cp -r etc/smartdns/* /release/etc/smartdns/ && \
+    rm /release/etc/smartdns/smartdns.conf
 
-# Final stage
+# Final image
 FROM alpine:latest
+
 COPY --from=builder /release/ /
 
-# Working directory for smartdns
-WORKDIR /
-
-# Add entrypoint and config file
+# 添加执行脚本与配置文件（你可以替换为你自己的）
 ADD start.sh /start.sh
 ADD smartdns.conf /smartdns.conf
 
-# Make files executable and install ipset
-RUN chmod +x /usr/sbin/smartdns \
-    && chmod +x /start.sh \
-    && apk add ipset
+RUN chmod +x /start.sh /usr/sbin/smartdns && \
+    apk add --no-cache ipset
 
-# Mount point for configuration
 VOLUME ["/etc/smartdns"]
 
-# Start command
 CMD ["/start.sh"]
