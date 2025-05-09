@@ -1,44 +1,49 @@
-#===============================
-# Stage 1: Build QUIC libraries (nghttp3 + ngtcp2)
-#===============================
-FROM ubuntu:latest AS quic-builder
-ARG DEBIAN_FRONTEND=noninteractive
+FROM ubuntu:latest AS builder
+LABEL first stage
 
-# Install necessary dependencies
+#===========================================================================================================
+# new compile routine
+# compile openssl
+ARG openssl_version=3.0.13
+
 RUN apt update && \
-    apt install -y \
-        build-essential \
-        autoconf \
-        automake \
-        libtool \
-        pkg-config \
-        git \
-        ca-certificates \
-        libssl-dev \
-        libev-dev \
-        libevent-dev \
-        libjemalloc-dev \
-        libnghttp2-dev \
-        libunistring-dev \
-        zlib1g-dev \
-        cmake \
-        ninja-build \
-        python3 \
-        curl && \
-    apt clean
+    apt install build-essential wget -y && \
+    wget "https://www.openssl.org/source/openssl-$openssl_version.tar.gz" && \
+    tar xf "openssl-$openssl_version.tar.gz" && \
+    cd openssl-$openssl_version && \
+    ./config && \
+    make build_libs -j $(grep "cpu cores" /proc/cpuinfo | wc -l) && \
+    make install_dev  && \
+    cd .. && \
+    rm -rf "openssl-$openssl_version" "openssl-$openssl_version.tar.gz"
+    
+#=======================================================================================================    
+#compile smartdns
 
-# Clone and build nghttp3 (simplified)
-RUN git clone --branch main --single-branch https://github.com/ngtcp2/nghttp3 && \
-    cd nghttp3 && \
-    make -j$(nproc) || (cat config.log && exit 1) && \
-    make install || (cat config.log && exit 1)
+RUN apt install -y git && \
+    git clone https://github.com/pymumu/smartdns /smartdns && \
+    cd /smartdns && \
+    bash package/build-pkg.sh --platform linux --arch x86_64 --static && \
+    strip src/smartdns && \
+    mkdir -p /release/var/log /release/run && \
+    mkdir -p /release/etc/smartdns/ && \
+    mkdir -p /release/usr/sbin/ && \
+    cp etc/smartdns/*.* /release/etc/smartdns/ -a && \
+    cp src/smartdns /release/usr/sbin/ -a && \
+    rm  /release/etc/smartdns/smartdns.conf && \
+    cd / && rm -rf /smartdns
+    
+FROM alpine:latest
+COPY --from=builder /release/ /
 
-# Clone and build ngtcp2 (simplified)
-RUN git clone --branch main --single-branch https://github.com/ngtcp2/ngtcp2 && \
-    cd ngtcp2 && \
-    autoreconf -i && \
-    ./configure --prefix=/usr \
-        --with-openssl \
-        --with-libnghttp3=/usr && \
-    make -j$(nproc) && \
-    make install
+WORKDIR /
+ADD start.sh /start.sh
+ADD smartdns.conf /smartdns.conf
+
+RUN chmod +x /usr/sbin/smartdns \
+    && chmod +x /start.sh \
+    && apk add ipset
+
+VOLUME ["/etc/smartdns"]
+
+CMD ["/start.sh"]
