@@ -7,7 +7,7 @@ LABEL first stage
 ARG openssl_version=3.0.13
 
 RUN apt update && \
-    apt install build-essential wget -y && \
+    apt install build-essential wget git curl pkg-config libssl-dev libnghttp2-dev -y && \
     wget "https://www.openssl.org/source/openssl-$openssl_version.tar.gz" && \
     tar xf "openssl-$openssl_version.tar.gz" && \
     cd openssl-$openssl_version && \
@@ -18,9 +18,19 @@ RUN apt update && \
     rm -rf "openssl-$openssl_version" "openssl-$openssl_version.tar.gz"
 
 #===========================================================================================================
+# Install gRPC and QUIC related dependencies
+RUN apt install -y cmake libprotobuf-dev protobuf-compiler \
+    && git clone https://github.com/grpc/grpc.git /grpc && \
+    cd /grpc && \
+    git submodule update --init --recursive && \
+    make && make install && \
+    cd / && rm -rf /grpc
+
+RUN apt install -y libnghttp3-dev
+
+#===========================================================================================================
 # Compile SmartDNS
-RUN apt install -y git && \
-    git clone https://github.com/pymumu/smartdns /smartdns && \
+RUN git clone https://github.com/pymumu/smartdns /smartdns && \
     cd /smartdns && \
     # 使用 --enable-quic 标志启用 QUIC（DoQ）
     bash package/build-pkg.sh --platform linux --arch x86_64 --static --enable-quic && \
