@@ -12,6 +12,9 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: guhill1/docker-smartdns
   IMAGE_TAG: ghcr.io/guhill1/docker-smartdns:latest
+  DOCKER_BUILDKIT: 1
+  BUILDKIT_PROGRESS: plain
+
 
 jobs:
   build-and-push-image:
