@@ -48,7 +48,6 @@ jobs:
           build-args: |
             BUILDKIT_INLINE_CACHE=1
           cache-from: type=registry,ref=${{ env.IMAGE_TAG }}
-          cache-to: type=inline
 
       - name: Save Docker image locally
         run: docker save --output docker-smartdns.tar "${{ env.IMAGE_TAG }}"
