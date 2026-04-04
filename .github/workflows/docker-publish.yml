@@ -1,6 +1,6 @@
 name: push Docker image to ghcr.io
 on:
-  repository_dispatch:
+  workflow_dispatch:
   schedule:
      - cron:  '0 1 */7 * *'    # At every 7days
   push:
