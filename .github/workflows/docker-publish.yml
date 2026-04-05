@@ -10,9 +10,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: guhill1/docker-smartdns
   IMAGE_TAG: ghcr.io/guhill1/docker-smartdns:latest
-  DOCKER_BUILDKIT: 1
 
 jobs:
   build-and-push-image:
@@ -48,7 +46,6 @@ jobs:
           push: true
           load: true
           tags: ${{ env.IMAGE_TAG }}
-          no-cache: true
 
       - name: Save Docker image locally
         run: docker save --output docker-smartdns.tar "${{ env.IMAGE_TAG }}"
