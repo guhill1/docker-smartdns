@@ -2,6 +2,7 @@ name: Push Docker image to ghcr.io
 
 on:
   workflow_dispatch:   # 允许手动触发
+  repository_dispatch: # 接收外部 dispatch 触发
   schedule:
     - cron: '0 1 */7 * *'    # 每7天触发一次
   push:
