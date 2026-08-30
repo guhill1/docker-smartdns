@@ -10,7 +10,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_TAG: ghcr.io/guhill1/docker-smartdns:latest
+  # 镜像名称必须全小写
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build-and-push-image:
@@ -32,23 +33,34 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # 使用官方 action 自动提取格式正确（小写）的元数据
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.IMAGE_TAG }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
 
-            
+      # 步骤 1：构建并推送到 GHCR
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      # 步骤 2：构建并加载到本地 Docker daemon（用于后续 docker save）
+      - name: Build and load Docker image locally
+        uses: docker/build-push-action@v5
+        with:
+          context: .
           load: true
-          tags: ${{ env.IMAGE_TAG }}
+          tags: ${{ steps.meta.outputs.tags }}
 
       - name: Save Docker image locally
-        run: docker save --output docker-smartdns.tar "${{ env.IMAGE_TAG }}"
+        run: docker save --output docker-smartdns.tar "${{ steps.meta.outputs.tags }}"
 
       - name: Upload Docker image artifact
         uses: actions/upload-artifact@v4
